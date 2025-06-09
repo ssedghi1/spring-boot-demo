@@ -24,7 +24,10 @@ class HelloControllerTests {
 
     @Test
     void helloEndpointReturnsHelloWorldWhenAuthenticated() {
-        webTestClient.mutateWith(SecurityMockServerConfigurers.mockJwt().authorities(() -> "SCOPE_demo.read"))
+        webTestClient.mutateWith(
+                SecurityMockServerConfigurers.mockJwt()
+                        .jwt(jwt -> jwt.claim("iss", "https://login.microsoftonline.com/{tenant-id}/v2.0"))
+                        .authorities(() -> "SCOPE_demo.read"))
                 .get()
                 .uri("/hello")
                 .exchange()
